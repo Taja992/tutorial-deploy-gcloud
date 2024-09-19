@@ -7,6 +7,8 @@ using Service;
 using Service.Blog;
 using Service.Draft;
 using Service.Repositories;
+using Microsoft.AspNetCore.HttpOverrides;
+
 
 namespace Api;
 
@@ -79,6 +81,13 @@ public class Program
         builder.Services.AddSwaggerGen();
 
         var app = builder.Build();
+        
+        app.UseForwardedHeaders(
+            new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            }
+        );
 
         app.UseMiddleware<ErrorHandlingMiddleware>();
 
